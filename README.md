@@ -1,6 +1,9 @@
 # Zookeeper Cluster
 A complete cluster running Zookeeper. This is a test for the ansible zookeeper role. The role will be extracted in it's own repository when everything is working.
 
+## Supports
+- Debian:
+    - wheezy
 
 ## Preconditions
 
