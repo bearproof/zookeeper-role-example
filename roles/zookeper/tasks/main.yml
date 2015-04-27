@@ -1,6 +1,6 @@
 ---
+- name: Write the hosts file
+  template: src=hosts.j2 dest=/etc/hosts
+
 - include: Debian.yml
   when: ansible_os_family == 'Debian'
-
-- include: RedHat.yml
-  when: ansible_os_family == 'RedHat'
