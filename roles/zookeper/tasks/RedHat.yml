@@ -1,0 +1,44 @@
+---
+
+# Install Zookeper RPM repository for CentOS and RedHat 6. Should work for 7 too
+- name: install the Cloudera yum repo for CentOS and RedHat 6
+  yum: name=http://archive-primary.cloudera.com/cdh5/one-click-install/redhat/6/x86_64/cloudera-cdh-5-0.x86_64.rpm
+  when: (ansible_distribution_major_version == "6" or  ansible_distribution_major_version == "7")
+
+#Install the zookeeper package when RedHat or Centos 6 or 7
+- name: Install zookeeper
+  yum: name={{ item }} state=latest
+  with_items:
+    - zookeeper
+    - zookeeper-server
+
+# generate the config file
+- name: Populate /etc/hosts
+  template: dest=/etc/hosts src=hosts.j2
+
+# generate the config file
+- name: Populate the zookeper config file
+  template: dest=/etc/zookeeper/conf/zoo.cfg src=zoo.cfg.j2 mode=0644
+
+# generate data directory
+- name: Create data directory
+  file: path=/var/zookeeper owner=zookeeper mode=0755 state=directory
+
+# Set zookeper myid
+- name: set myid for zookeeper
+  template: dest=/var/zookeeper/myid src=myid.j2 mode=0644
+
+# Install java
+- name: Install Java
+  yum: name=java-1.7.0-openjdk-devel state=latest
+
+# Run zookeeper command
+# Run the command if the specified file does not exist.
+- command: zookeeper-server-initialize
+  sudo: yes
+  sudo_user: zookeeper
+  ignore_errors: yes
+
+# restart zookeeper so that our changes can take effect
+- name: restart zookeeper
+  service: name=zookeeper-server state=restarted

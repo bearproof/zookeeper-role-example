@@ -1,0 +1,6 @@
+
+[zookeeper_hosts]
+zookeeper-1 ansible_ssh_host=zookeeper-1 zookeeper_myid=1
+zookeeper-2 ansible_ssh_host=zookeeper-2 zookeeper_myid=2
+zookeeper-3 ansible_ssh_host=zookeeper-3 zookeeper_myid=3
+
